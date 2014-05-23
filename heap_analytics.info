@@ -1,0 +1,5 @@
+name = Heap Analytics
+description = Heap Analytics integration.
+core = 7.x
+package = Statistics
+configure = admin/config/system/heapanalytics

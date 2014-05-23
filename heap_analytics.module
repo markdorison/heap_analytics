@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file heap_analytics.module
+ *
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function heap_analytics_menu() {
+  $items = array();
+  $items['admin/config/system/heapanalytics'] = array(
+    'title' => 'Heap Analytics',
+    'description' => 'Use this page to configure your Heap Analytics module settings with your account code.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('heap_analytics_admin_settings_form'),
+    'access arguments' => array('administer heap analytics'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'heap_analytics.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function heap_analytics_permission() {
+  return array(
+    'administer heap analytics' => array(
+      'title' => t('Administer Heap Analytics'),
+      'description' => t('Configure Heap Analytics.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function heap_analytics_page_alter(&$page) {
+  if (!path_is_admin(current_path())) {
+    $account_id = variable_get('heap_analytics_account_id', NULL);
+    if (!empty($account_id)) {
+      drupal_add_js(array('heapAnalytics' => array('accountId' => $account_id)), 'setting');
+      drupal_add_js(drupal_get_path('module', 'heap_analytcs') . '/heap_analytics.js');
+    }
+  }
+}
